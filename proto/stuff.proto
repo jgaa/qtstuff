@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package version;
+
+service VersionService {
+  rpc GetVersion(GetVersionRequest) returns (VersionResponse);
+}
+
+message GetVersionRequest {
+  // No fields needed for a simple version request.
+}
+
+message VersionResponse {
+  string version = 1;
+}
