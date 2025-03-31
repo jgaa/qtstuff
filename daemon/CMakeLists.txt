@@ -14,8 +14,6 @@ FetchContent_MakeAvailable(logfault)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED CONFIG COMPONENTS
-    system
-    filesystem
     program_options
 )
 
@@ -29,7 +27,11 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
     ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${PROTO_BINARY_DIR}
 )
+
+message(STATUS "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
+message(STATUS "PROTO_BINARY_DIR: ${PROTO_BINARY_DIR}")
 
 target_link_libraries(${PROJECT_NAME}
     ${Boost_LIBRARIES}

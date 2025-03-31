@@ -13,3 +13,4 @@ protobuf_generate(
     PLUGIN_OPTIONS generate_mock_code=true
     GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc)
 
+set(PROTO_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)

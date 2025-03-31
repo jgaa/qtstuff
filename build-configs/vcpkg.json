@@ -1,0 +1,42 @@
+{
+  "name": "qtstuff",
+  "dependencies": [
+    "boost-program-options",
+    "grpc",
+    "protobuf",
+    "pcre2",
+    "double-conversion",
+    "libpng",
+    "libjpeg-turbo",
+    "brotli",
+    "sqlite3",
+    {
+      "name": "qtbase",
+      "version>=": "6.8.2",
+      "features": [
+        "concurrent",
+        "testlib",
+        "dnslookup",
+        "network"
+      ]
+    },
+    {
+      "name": "qtdeclarative",
+      "version>=": "6.8.2"
+    },
+    {
+      "name": "qtcharts",
+      "version>=": "6.8.2"
+    },
+    {
+      "name": "qtsvg",
+      "version>=": "6.8.2"
+    },
+    {
+      "name": "qtgrpc",
+      "version>=": "6.8.2"
+    }
+  ],
+
+  "builtin-baseline": "acd5bba5aac8b6573b5f6f463dc0341ac0ee6fa4"
+}
