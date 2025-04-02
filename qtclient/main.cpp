@@ -1,23 +1,77 @@
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtLogging>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
+#include <QMessageLogContext>
+#include <QDebug>
+#include <QLoggingCategory>
+
+namespace {
+void logToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    static QFile logFile("log.txt");
+    static bool initialized = false;
+
+    if (!initialized) {
+        logFile.open(QIODevice::Append | QIODevice::Text);
+        initialized = true;
+    }
+
+    QTextStream out(&logFile);
+    QString level;
+
+    switch (type) {
+    case QtDebugMsg:    level = "DEBUG"; break;
+    case QtInfoMsg:     level = "INFO"; break;
+    case QtWarningMsg:  level = "WARNING"; break;
+    case QtCriticalMsg: level = "CRITICAL"; break;
+    case QtFatalMsg:    level = "FATAL"; break;
+    }
+
+    out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+        << " [" << level << "] "
+        << msg
+        << " (" << context.file << ":" << context.line << ", " << context.function << ")\n";
+
+    out.flush();
+
+    if (type == QtFatalMsg)
+        abort();
+}
+} // ns
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    qInstallMessageHandler(logToFile);
 
+    // optional: enable extra logging
+    QLoggingCategory::setFilterRules(
+        "qt.qml.imports.debug=true\n"
+        "qt.qml.loader.info=true\n"
+        "*.debug=true\n"
+        );
+
+
+    // Now do Qt stuff
+    QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
         &app,
-        [&app
-        ]() {
-            qCritical() << "Failed to create object in QML engine";
+        [&]() {
+            qCritical() << "QML object creation failed.";
             QCoreApplication::exit(-1);
         },
         Qt::QueuedConnection);
+
     engine.loadFromModule("QtStuff", "Main");
 
-    return app.exec();
+    int result = app.exec();
+    qDebug() << "App exiting with code: " << result;
+    return result;
 }
+
