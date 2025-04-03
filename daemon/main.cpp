@@ -1,7 +1,6 @@
 #include <iostream>
 #include <filesystem>
 #include <boost/program_options.hpp>
-#include <boost/asio.hpp>
 
 #include "config.h"
 #include "logfault/logfault.h"

@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "DataModel.h"
 
 using namespace std;
@@ -34,9 +36,14 @@ void DataModel::startGrpc()
     client_ = make_unique<version::VersionService::Client>();
     client_->attachChannel(channel_);
 
+    qDebug() << "Calling RPC";
     auto reply = client_->GetVersion(version::GetVersionRequest{});
+    assert(reply);
+
+    qDebug() << "Connecting to finished.";
+    auto *r = reply.get();
     QObject::connect(
-        reply.get(), &QGrpcCallReply::finished, reply.get(),
+        r, &QGrpcCallReply::finished, r,
         [reply = std::move(reply), this](const QGrpcStatus &status) {
             if (status.isOk()) {
                 if (auto data = reply->read<version::VersionResponse>()) {

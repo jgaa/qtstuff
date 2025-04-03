@@ -48,13 +48,14 @@ int main(int argc, char *argv[])
     qInstallMessageHandler(logToFile);
     Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 
+#if 0
     // optional: enable extra logging
     QLoggingCategory::setFilterRules(
         "qt.qml.imports.debug=true\n"
         "qt.qml.loader.info=true\n"
         "*.debug=true\n"
         );
-
+#endif
 
     // Now do Qt stuff
     QGuiApplication app(argc, argv);
