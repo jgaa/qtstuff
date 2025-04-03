@@ -16,7 +16,15 @@
         "concurrent",
         "testlib",
         "dnslookup",
-        "network"
+        "network",
+	"xcb",
+	"dbus",
+	"gui",
+	"icu",
+	"jpeg",
+	"opengl",
+	"openssl",
+	"xcb-xlib"
       ]
     },
     {

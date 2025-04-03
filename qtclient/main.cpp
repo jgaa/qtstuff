@@ -7,6 +7,7 @@
 #include <QMessageLogContext>
 #include <QDebug>
 #include <QLoggingCategory>
+#include <QtPlugin>
 
 namespace {
 void logToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -45,6 +46,7 @@ void logToFile(QtMsgType type, const QMessageLogContext &context, const QString 
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(logToFile);
+    Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 
     // optional: enable extra logging
     QLoggingCategory::setFilterRules(
