@@ -16,7 +16,7 @@ mkdir "%BUILD_DIR%" || exit /b
 cmake -S "%SOURCE_DIR%" -B "%BUILD_DIR%" ^
     -DCMAKE_TOOLCHAIN_FILE=%TOOLCHAIN_FILE% ^
     -DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET% ^
-    -DENABLE_GRPC=OFF || exit /b
+    -DENABLE_GRPC=ON || exit /b
 
 cd "%BUILD_DIR%" || exit /b
 set "PATH=%PATH%;%BUILD_DIR%\vcpkg_installed\x64-windows\bin;%BUILD_DIR%\vcpkg_installed\x64-windows\tools\Qt6\bin"
