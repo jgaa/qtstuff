@@ -38,6 +38,7 @@ tstuff\qtclient\grpc_stuff_qtprotobufgen_deps_0.vcxproj]
 To reproduce: Run **`build-for-windows.bat`**
 
 **Note that**
+- I run the batchfile from a `x64 Native Tools Command Prompt for VS 2022`
 - I don't use vcpkg bundled with msvc
 - vcpkg is installed in `C:\src\vcpkg` If you use another location, you must update `build-for-windows.bat` with its location before running it.
 - The build-location in `build-for-windows.bat` is `C:\build\qtstuff`. Change it to suit your preferences.
