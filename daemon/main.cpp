@@ -9,12 +9,15 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
+
+#ifdef __linux__
     try {
         locale loc("");
     } catch (const std::exception&) {
-        cout << "Locales in Linux are fundamentally broken. Never worked. Never will. Overriding the current mess with LC_ALL=C" << endl;
-        setenv("LC_ALL", "C", 1);
+        cout << "Locales in Linux are fundamentally broken. Never worked. Never will. Overriding the current mess with LC_ALL=en_US.UTF-8" << endl;
+        setenv("LC_ALL", "en_US.UTF-8", 1);
     }
+#endif
 
     qtstuff::daemon::Config config;
     namespace po = boost::program_options;

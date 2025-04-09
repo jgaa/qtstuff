@@ -46,7 +46,10 @@ void logToFile(QtMsgType type, const QMessageLogContext &context, const QString 
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(logToFile);
+
+#ifdef __linux__
     Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
+#endif
 
 #if 0
     // optional: enable extra logging
