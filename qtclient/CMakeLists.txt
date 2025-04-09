@@ -6,7 +6,7 @@ project(qtstuff
 if (ENABLE_GRPC)
     set(GRPC_PACKAGES Core Protobuf ProtobufQuick Grpc ProtobufQtCoreTypes)
     set(GRPC_TARGETS
-        grpc_stuff
+        grpc_stuff_grpc
         Qt6::Core
 	gRPC::grpc++
     )
@@ -19,24 +19,30 @@ find_package(Qt6 6.8.2 REQUIRED COMPONENTS Quick ${GRPC_PACKAGES} REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0002 NEW)
+qt_policy(SET QTP0003 NEW)
+qt_policy(SET QTP0004 NEW)
+
 if (ENABLE_GRPC)
     add_library(grpc_stuff STATIC)
 
-    qt_add_protobuf(grpc_stuff
-        QML
-        QML_URI QtGrpcStuff.Proto
+    qt_add_protobuf(grpc_stuff_pb
+#        QML
+#        QML_URI QtGrpcStuff.Proto
         PROTO_FILES
             ${protofile}
         PROTO_INCLUDES
             $<TARGET_PROPERTY:Qt6::ProtobufQtCoreTypes,QT_PROTO_INCLUDES>
     )
 
-    qt_add_grpc(grpc_stuff CLIENT
+    qt_add_grpc(grpc_stuff_grpc CLIENT
         PROTO_FILES ${protofile}
     )
 
-    target_link_libraries(grpc_stuff
+    target_link_libraries(grpc_stuff_grpc
         PUBLIC
+            grpc_stuff_pb
             Qt6::Protobuf
             Qt6::ProtobufQtCoreTypes
             Qt6::Grpc
