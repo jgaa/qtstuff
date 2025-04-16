@@ -15,7 +15,7 @@ if (ENABLE_GRPC)
 endif()
 
 # Find the Qt 6 Quick module
-find_package(Qt6 6.8.2 REQUIRED COMPONENTS Quick ${GRPC_PACKAGES} REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Quick ${GRPC_PACKAGES} REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.8)
 

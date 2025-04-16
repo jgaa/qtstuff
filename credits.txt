@@ -1,0 +1,3 @@
+icon.ico:
+  Original image from https://uxwing.com/manager-icon/
+  Converted to .ico at https://convertico.com/svg-to-ico/

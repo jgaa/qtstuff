@@ -19,3 +19,51 @@ if (ENABLE_GRPC)
     add_subdirectory(proto)
     add_subdirectory(daemon)
 endif()
+
+if(WIN32)
+    include(InstallRequiredSystemLibraries)
+
+    # List of runtime DLLs to install with the app
+    install(FILES
+        "${CMAKE_BINARY_DIR}/bin/libssl-3-x64.dll"
+        "${CMAKE_BINARY_DIR}/bin/libcrypto-3-x64.dll"
+        "${CMAKE_BINARY_DIR}/bin/brotlidec.dll"
+        "${CMAKE_BINARY_DIR}/bin/brotlicommon.dll"
+        "${CMAKE_BINARY_DIR}/bin/brotlidec.dll"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+
+    set(CPACK_GENERATOR "NSIS")
+    set(CPACK_PACKAGE_NAME "qtstuff")
+    set(CPACK_PACKAGE_VENDOR "The Last Viking LTD")
+    set(CPACK_PACKAGE_CONTACT "tlv@example.com")
+    set(CPACK_PACKAGE_VERSION_MAJOR ${APP_VERSION_MAJOR})
+    set(CPACK_PACKAGE_VERSION_MINOR ${APP_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${APP_VERSION_PATCH})
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "qtstuff ${APP_VERSION}")
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
+    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+
+    set(CPACK_NSIS_DISPLAY_NAME "QtStuff")
+    set(CPACK_NSIS_PACKAGE_NAME "qtstuff ${APP_VERSION}")
+    set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/icon.ico")
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\qtstuff.exe")
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+    set(CPACK_NSIS_MODIFY_PATH ON)
+
+    # Create a Start Menu shortcut
+    set(CPACK_NSIS_CREATE_ICONS_EXTRA "
+    CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\qtstuff.lnk\\\" \\\"$INSTDIR\\\\bin\\\\qtstuff.exe\\\"
+    ")
+
+    # Clean up the shortcut during uninstall
+    set(CPACK_NSIS_DELETE_ICONS_EXTRA "
+    Delete \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\qtstuff.lnk\\\"
+    RMDir \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\"
+    ")
+
+    # Define the folder name in the Start Menu
+    set(CPACK_NSIS_START_MENU_FOLDER "qtstuff")
+
+    include(CPack)
+endif()

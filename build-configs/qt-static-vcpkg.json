@@ -1,0 +1,23 @@
+{
+  "name": "qt-deps",
+  "version-string": "6.8.2",
+  "dependencies": [
+    "libjpeg-turbo",
+    "double-conversion",
+    "freetype",
+    "harfbuzz",
+    "icu",
+    "openssl",
+    "sqlite3",
+    "boost-circular-buffer",
+    "boost-type-index",
+    "boost-multi-index",
+    "boost-uuid",
+    "openssl",
+    "grpc",
+    "protobuf",
+    "pkgconf",
+    "brotli"
+  ],
+  "builtin-baseline": "d5182f703b51d7b258f83f94d936ac03488dcdbe"
+}
