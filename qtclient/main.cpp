@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(logToFile);
 
-#ifdef __linux__
+#if defined(__linux__) && defined(QT_STATIC)
     Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 #endif
 

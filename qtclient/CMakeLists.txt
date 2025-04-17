@@ -10,7 +10,7 @@ if (ENABLE_GRPC)
         Qt6::Core
 	gRPC::grpc++
     )
-    find_package(grpc CONFIG REQUIRED)
+    find_package(gRPC CONFIG REQUIRED)
     add_compile_definitions(ENABLE_GRPC)
 endif()
 
