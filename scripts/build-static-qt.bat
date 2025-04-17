@@ -63,8 +63,8 @@ if errorlevel 1 (
     echo Failed to cd to %QT_BUILD_DIR%
     exit /b
 )
+
 echo "Ready to install vcpkg dependencies"
-cd
 dir
 vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
