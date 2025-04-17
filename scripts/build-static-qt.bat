@@ -58,7 +58,7 @@ if errorlevel 1 (
     exit /b
 )
 
-cd "%QT_BUILD_DIR%"
+pushd "%QT_BUILD_DIR%"
 if errorlevel 1 (
     echo Failed to cd to %QT_BUILD_DIR%
     exit /b

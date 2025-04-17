@@ -73,7 +73,7 @@ if errorlevel 1 (
 )
 
 
-cd "%MY_BUILD_DIR%" || exit /b
+pushd "%MY_BUILD_DIR%" || exit /b
 set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin;%MY_BUILD_DIR%\bin;%PATH%"
 
 cmake --build . --config Release
