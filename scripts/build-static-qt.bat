@@ -52,6 +52,12 @@ if errorlevel 1 (
 )
 
 cd %QT_BUILD_DIR%
+if errorlevel 1 (
+    echo Failed to cd to %QT_BUILD_DIR%
+    exit /b
+)
+echo "Ready to install vcpkg dependencies"
+dir
 vcpkg install --triplet %VCPKG_DEFAULT_TRIPLET%
 
 set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\x64-windows\share\openssl\OpenSSLConfig.cmake
