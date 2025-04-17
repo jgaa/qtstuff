@@ -28,9 +28,9 @@ jobs:
 
       - name: Update vcpkg to the latest revision
         run: |
-             cd C:\vcpkg
-             git pull
-             .\bootstrap-vcpkg.bat
+            echo Updating vcpkg in %VCPKG_ROOT% 
+            cd "%VCPKG_ROOT%"
+            git pull
 
       - name: Build QT statically and build the app
         run: |
