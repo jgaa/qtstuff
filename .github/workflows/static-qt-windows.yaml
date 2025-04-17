@@ -20,8 +20,8 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo BUILD_DIR=%USERPROFILE%\build-dir>>%GITHUB_ENV%
-          echo QT_TARGET_DIR=%USERPROFILE%\qt-target>>%GITHUB_ENV%
+          echo BUILD_DIR=%GITHUB_WORKSPACE%\build>>%GITHUB_ENV%
+          echo QT_TARGET_DIR=%GITHUB_WORKSPACE%\qt-target>>%GITHUB_ENV%
           echo VCPKG_ROOT=C:\vcpkg>>%GITHUB_ENV%
           echo VCPKG_DEFAULT_TRIPLET=x64-windows-static>>%GITHUB_ENV%
           echo CMAKE_GENERATOR_PLATFORM=x64>>%GITHUB_ENV%
@@ -29,7 +29,8 @@ jobs:
       - name: Update vcpkg to the latest revision
         run: |
             echo Updating vcpkg in %VCPKG_ROOT% 
-            cd "%VCPKG_ROOT%"
+            pushd "%VCPKG_ROOT%"
+            git fetch --unshallow || echo Already a full clone
             git pull
 
       - name: Build QT statically and build the app

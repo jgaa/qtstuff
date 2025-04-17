@@ -45,7 +45,7 @@ if exist "%QT_TARGET_DIR%" rmdir /S /Q "%QT_TARGET_DIR%"
 mkdir %QT_TARGET_DIR%
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 
-git clone --depth=1 --branch %QT_VERSION% git://code.qt.io/qt/qt5.git "%QT_BUILD_DIR%"
+git clone --quiet --depth=1 --branch %QT_VERSION% git://code.qt.io/qt/qt5.git "%QT_BUILD_DIR%"
 if errorlevel 1 (
     echo Failed clone Qt
     exit /b
