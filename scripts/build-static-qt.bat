@@ -30,7 +30,7 @@ if not defined VCPKG_DEFAULT_TRIPLET (
 )
 
 
-set QT_BUILD_DIR=%BUILD_DIR%/qt
+set QT_BUILD_DIR=%BUILD_DIR%\qt
 echo "Qt build dir is: %QT_BUILD_DIR%"
 
 echo %PATH% | find /I "%VCPKG_ROOT%" >nul
@@ -51,7 +51,7 @@ if errorlevel 1 (
     exit /b
 )
 
-copy build-configs\qt-static-vcpkg.json "%QT_BUILD_DIR%"\vcpkg.json
+copy build-configs\qt-static-vcpkg.json "%QT_BUILD_DIR%\vcpkg.json"
 if errorlevel 1 (
     echo Failed to copy vcpkg.json
     exit /b
