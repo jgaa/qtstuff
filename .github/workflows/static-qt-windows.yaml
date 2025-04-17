@@ -19,6 +19,7 @@ jobs:
            echo QT_TARGET_DIR=%USERPROFILE%\qt-target >> $GITHUB_ENV
            echo VCPKG_ROOT=C:\vcpkg >> $GITHUB_ENV
            echo VCPKG_DEFAULT_TRIPLET=x64-windows-static >> $GITHUB_ENV
+           echo CMAKE_GENERATOR_PLATFORM=x64 >> $GITHUB_ENV
 
       - name: Update vcpkg to the latest revision
         run: |
@@ -29,9 +30,6 @@ jobs:
       - name: Build QT statically and build the app
         shell: cmd
         run: |
-           call "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath > vs_path.txt
-           set /p VS_PATH=<vs_path.txt
-           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
            build-for-windows-with-static-qt.bat
 
       - name: Upload artifacts
