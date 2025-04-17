@@ -84,3 +84,8 @@ if errorlevel 1 (
 rem cmake --install . --config Release
 cpack -G NSIS
 
+copy /Y "%MY_BUILD_DIR%\*.exe" "%BUILD_DIR%\"
+if errorlevel 1 (
+    echo Failed to copy the executable installer
+    exit /b
+)
