@@ -51,6 +51,7 @@ if errorlevel 1 (
     exit /b
 )
 
+echo Copying build-configs\qt-static-vcpkg.json to %QT_BUILD_DIR%\vcpkg.json
 copy build-configs\qt-static-vcpkg.json "%QT_BUILD_DIR%\vcpkg.json"
 if errorlevel 1 (
     echo Failed to copy vcpkg.json
@@ -63,6 +64,7 @@ if errorlevel 1 (
     exit /b
 )
 echo "Ready to install vcpkg dependencies"
+cd
 dir
 vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
