@@ -27,6 +27,7 @@ jobs:
              .\bootstrap-vcpkg.bat
 
       - name: Build QT statically and build the app
+        shell: cmd
         run: |
            call "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath > vs_path.txt
            set /p VS_PATH=<vs_path.txt
