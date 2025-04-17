@@ -1,5 +1,9 @@
 @echo off
 
+echo "Building static Qt for Windows"
+
+set "ORIGINAL_PATH=%PATH%"
+
 REM Check for directory "qtclient"
 if not exist "qtclient\" (
     echo Error: This script must be run from the root directory containing the 'qtclient' folder.
@@ -11,6 +15,7 @@ if not defined QT_VERSION set QT_VERSION=6.8.3
 if not defined BUILD_DIR (
     set "BUILD_DIR=C:\build"
 )
+echo "Build dir is: %BUILD_DIR%"
 
 if not defined QT_TARGET_DIR (
     set "QT_TARGET_DIR=C:\qt-static"
@@ -26,6 +31,7 @@ if not defined VCPKG_DEFAULT_TRIPLET (
 
 
 set QT_BUILD_DIR=%BUILD_DIR%/qt
+echo "Qt build dir is: %QT_BUILD_DIR%"
 
 echo %PATH% | find /I "%VCPKG_ROOT%" >nul
 if errorlevel 1 (
@@ -39,7 +45,7 @@ if exist "%QT_TARGET_DIR%" rmdir /S /Q "%QT_TARGET_DIR%"
 mkdir %QT_TARGET_DIR%
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 
-git clone --depth=1 --branch %QT_VERSION% git://code.qt.io/qt/qt5.git %QT_BUILD_DIR%
+git clone --depth=1 --branch %QT_VERSION% git://code.qt.io/qt/qt5.git "%QT_BUILD_DIR%"
 if errorlevel 1 (
     echo Failed clone Qt
     exit /b
@@ -51,14 +57,14 @@ if errorlevel 1 (
     exit /b
 )
 
-cd %QT_BUILD_DIR%
+cd "%QT_BUILD_DIR%"
 if errorlevel 1 (
     echo Failed to cd to %QT_BUILD_DIR%
     exit /b
 )
 echo "Ready to install vcpkg dependencies"
 dir
-vcpkg install --triplet %VCPKG_DEFAULT_TRIPLET%
+vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
 set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\x64-windows\share\openssl\OpenSSLConfig.cmake
 powershell -Command "(Get-Content \"%BAD_CMAKE_FILE%\") -replace 'OpenSSL::applink', '' | Set-Content \"%BAD_CMAKE_FILE%\""
@@ -70,7 +76,7 @@ if errorlevel 1 (
 )
 
 call configure.bat ^
-  -prefix %QT_TARGET_DIR% ^
+  -prefix "%QT_TARGET_DIR%" ^
   -static ^
   -release ^
   -opensource ^
@@ -117,5 +123,6 @@ if errorlevel 1 (
     exit /b
 )
 
-echo "Successfully built and installed static Qt to %QT_TARGET_DIR%"
+echo Successfully built and installed static Qt to %QT_TARGET_DIR%
 
+set "PATH=%ORIGINAL_PATH%"

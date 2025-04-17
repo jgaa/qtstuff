@@ -50,6 +50,7 @@ set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
 set TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
 
 echo "Path is: %PATH%"
+echo "Building qtstuff in %MY_BUILD_DIR%"
 
 rmdir /S /Q "%MY_BUILD_DIR%"
 mkdir "%MY_BUILD_DIR%"
