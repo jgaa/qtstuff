@@ -1,7 +1,5 @@
 @echo off
 
-cd C:\Users\jgaa\source\repos\qtstuff
-
 REM Check for directory "qtclient"
 if not exist "qtclient\" (
     echo Error: This script must be run from the project's root directory containing the 'qtclient' folder.
@@ -26,8 +24,15 @@ if not defined VCPKG_DEFAULT_TRIPLET (
     set "VCPKG_DEFAULT_TRIPLET=x64-windows-release"
 )
 
-
-rem TODO: Build qt statically
+echo Static Qt target dir is: %QT_TARGET_DIR%
+if not exist "%QT_TARGET_DIR%\" (
+    echo Qt static build not found. Running build-static-qt.bat...
+    call .\scripts\build-static-qt.bat
+    if errorlevel 1 (
+        echo Error: Failed to build static Qt.
+        exit /b 1
+    )
+)
 
 echo
 echo -------------------------------------------
