@@ -49,8 +49,8 @@ if errorlevel 1 (
 set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
 set TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
 
-echo "Path is: %PATH%"
-echo "Building qtstuff in %MY_BUILD_DIR%"
+echo Path is: %PATH%
+echo Building qtstuff in %MY_BUILD_DIR%
 
 rmdir /S /Q "%MY_BUILD_DIR%"
 mkdir "%MY_BUILD_DIR%"
@@ -78,7 +78,7 @@ set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%M
 
 cmake --build . --config Release
 if errorlevel 1 (
-    echo "Failed to build the project"
+    echo Failed to build the project
     exit /b
 )
 
