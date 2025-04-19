@@ -1,6 +1,6 @@
 @echo off
 
-echo "Building static Qt for Windows"
+echo Building static Qt for Windows
 
 set "ORIGINAL_PATH=%PATH%"
 
@@ -29,6 +29,12 @@ if not defined VCPKG_DEFAULT_TRIPLET (
     set "VCPKG_DEFAULT_TRIPLET=x64-windows-release"
 )
 
+echo From build-static-qt.bat
+echo VCPKG_ROOT is: %VCPKG_ROOT%
+echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
+echo QT_VERSION is: %QT_VERSION%
+echo QT_TARGET_DIR is: %QT_TARGET_DIR%
+echo VCPKG_ROOT is: %VCPKG_ROOT%
 
 set QT_BUILD_DIR=%BUILD_DIR%\qt
 echo "Qt build dir is: %QT_BUILD_DIR%"

@@ -31,6 +31,10 @@ echo QT_TARGET_DIR is: %QT_TARGET_DIR%
 echo VCPKG_ROOT is: %VCPKG_ROOT%
 echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
 
+if(MSVC)
+    add_compile_options(/EHsc)
+endif()
+
 
 echo Static Qt target dir is: %QT_TARGET_DIR%
 if not exist "%QT_TARGET_DIR%\" (
@@ -47,18 +51,10 @@ echo -------------------------------------------
 echo Building qtstuff using statically linked Qt
 echo
 
-copy /Y "%SOURCE_DIR%\build-configs\vcpkg-noqt.json" vcpkg.json
-if errorlevel 1 (
-    echo Failed to copy vcpkg.json
-    exit /b
-)
-
-
 set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
-set TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
+set "TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
 echo MY_BUILD_DIR is: %MY_BUILD_DIR%
 echo TOOLCHAIN_FILE is: %TOOLCHAIN_FILE%
-
 echo Building qtstuff in %MY_BUILD_DIR%
 
 rmdir /S /Q "%MY_BUILD_DIR%"
@@ -80,6 +76,13 @@ if errorlevel 1 (
 )
 echo Path is: %PATH%
 
+echo copy /Y %SOURCE_DIR%\build-configs\vcpkg-noqt.json %MY_BUILD_DIR%\vcpkg.json
+copy /Y "%SOURCE_DIR%\build-configs\vcpkg-noqt.json" vcpkg.json
+if errorlevel 1 (
+    echo Failed to copy %SOURCE_DIR%\build-configs\vcpkg-noqt.json to vcpkg.json
+    exit /b
+)
+
 echo Running vcpkg install for qtstuff
 vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
@@ -87,8 +90,7 @@ echo Listing vcpkg packages
 vcpkg list
 
 echo "Calling cmake for qtstuff"
-cmake --trace-expand --debug-output ^
-    -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
+cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
     -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN_FILE%" ^
     -DVCPKG_TARGET_TRIPLET="%VCPKG_DEFAULT_TRIPLET%" ^
     -DENABLE_GRPC=ON ^
