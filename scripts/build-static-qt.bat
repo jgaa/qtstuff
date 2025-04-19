@@ -37,7 +37,7 @@ echo QT_TARGET_DIR is: %QT_TARGET_DIR%
 echo VCPKG_ROOT is: %VCPKG_ROOT%
 
 set QT_BUILD_DIR=%BUILD_DIR%\qt
-echo "Qt build dir is: %QT_BUILD_DIR%"
+echo Qt build dir is: %QT_BUILD_DIR%
 
 echo %PATH% | find /I "%VCPKG_ROOT%" >nul
 if errorlevel 1 (
@@ -74,7 +74,7 @@ echo "Ready to install vcpkg dependencies"
 dir
 vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
-set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\x64-windows\share\openssl\OpenSSLConfig.cmake
+set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\share\openssl\OpenSSLConfig.cmake
 powershell -Command "(Get-Content \"%BAD_CMAKE_FILE%\") -replace 'OpenSSL::applink', '' | Set-Content \"%BAD_CMAKE_FILE%\""
 
 call init-repository --module-subset=default,-qtwebengine,-qtmultimedia
@@ -134,3 +134,4 @@ if errorlevel 1 (
 echo Successfully built and installed static Qt to %QT_TARGET_DIR%
 
 set "PATH=%ORIGINAL_PATH%"
+popd

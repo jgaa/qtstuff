@@ -5,6 +5,10 @@ project(QtQmlAndGrpc)
 set(APP_VERSION 0.1.0)
 add_definitions(-DAPP_VERSION="\""${APP_VERSION}\""")
 
+if(MSVC)
+    add_compile_options(/EHsc)
+endif()
+
 option(ENABLE_GRPC "Enable gRPC support" ON)
 #option(ENABLE_TLS  "Enable TLS support, using OpenSSL" OFF)
 

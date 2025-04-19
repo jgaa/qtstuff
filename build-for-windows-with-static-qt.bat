@@ -31,11 +31,6 @@ echo QT_TARGET_DIR is: %QT_TARGET_DIR%
 echo VCPKG_ROOT is: %VCPKG_ROOT%
 echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
 
-if(MSVC)
-    add_compile_options(/EHsc)
-endif()
-
-
 echo Static Qt target dir is: %QT_TARGET_DIR%
 if not exist "%QT_TARGET_DIR%\" (
     echo Qt static build not found. Running build-static-qt.bat...
@@ -117,3 +112,5 @@ if errorlevel 1 (
     echo Failed to copy the executable installer
     exit /b
 )
+
+popd
