@@ -20,6 +20,12 @@ if (ENABLE_GRPC)
     add_subdirectory(daemon)
 endif()
 
+message(STATUS "CMake system processor: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "CMake host system name: ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "Pointer size (CMAKE_SIZEOF_VOID_P): ${CMAKE_SIZEOF_VOID_P}")
+message(STATUS "CMake build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "CMake generator: ${CMAKE_GENERATOR}")
+
 if(WIN32)
     include(InstallRequiredSystemLibraries)
 

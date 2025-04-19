@@ -25,11 +25,9 @@ qt_policy(SET QTP0003 NEW)
 qt_policy(SET QTP0004 NEW)
 
 if (ENABLE_GRPC)
-    add_library(grpc_stuff STATIC)
-
     qt_add_protobuf(grpc_stuff_pb
-#        QML
-#        QML_URI QtGrpcStuff.Proto
+       QML
+       QML_URI QtGrpcStuff.Proto
         PROTO_FILES
             ${protofile}
         PROTO_INCLUDES
