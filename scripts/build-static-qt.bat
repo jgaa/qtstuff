@@ -74,9 +74,6 @@ echo "Ready to install vcpkg dependencies"
 dir
 vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
-set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\share\openssl\OpenSSLConfig.cmake
-powershell -Command "(Get-Content \"%BAD_CMAKE_FILE%\") -replace 'OpenSSL::applink', '' | Set-Content \"%BAD_CMAKE_FILE%\""
-
 call init-repository --module-subset=default,-qtwebengine,-qtmultimedia
 if errorlevel 1 (
     echo init-repository failed!
@@ -93,7 +90,6 @@ call configure.bat ^
   -nomake examples ^
   -nomake tests ^
   -opengl desktop ^
-  -openssl-linked ^
   -sql-sqlite ^
   -feature-png ^
   -feature-jpeg ^
