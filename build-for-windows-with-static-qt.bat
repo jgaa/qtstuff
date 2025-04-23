@@ -84,7 +84,7 @@ vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 echo Listing vcpkg packages
 vcpkg list
 
-set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin;%MY_BUILD_DIR%\bin;%PATH%"
+set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin;%MY_BUILD_DIR%\bin;%PATH%"
 
 echo "Calling cmake for qtstuff"
 cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
