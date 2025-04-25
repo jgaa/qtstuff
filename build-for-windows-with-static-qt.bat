@@ -1,5 +1,7 @@
 @echo off
 
+cd C:\Users\jgaa\source\repos\qtstuff
+
 REM Check for directory "qtclient"
 if not exist "qtclient\" (
     echo Error: This script must be run from the project's root directory containing the 'qtclient' folder.
@@ -30,6 +32,11 @@ echo BUILD_DIR is: %BUILD_DIR%
 echo QT_TARGET_DIR is: %QT_TARGET_DIR%
 echo VCPKG_ROOT is: %VCPKG_ROOT%
 echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
+
+echo "Cleaning PATH"
+call clean-path.bat
+set PATH=%CLEANED_PATH%
+echo Path is now: %PATH%
 
 echo Static Qt target dir is: %QT_TARGET_DIR%
 if not exist "%QT_TARGET_DIR%\" (
