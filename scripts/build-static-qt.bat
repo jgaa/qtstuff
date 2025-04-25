@@ -111,6 +111,7 @@ call configure.bat ^
   -vcpkg ^
   -nomake examples -nomake tests ^
   -- ^
+  -DFEATURE_system_zlib=OFF ^
   -DFEATURE_system_jpeg=OFF ^
   -DFEATURE_system_doubleconversion=OFF
 if errorlevel 1 (
