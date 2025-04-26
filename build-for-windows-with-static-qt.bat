@@ -55,9 +55,13 @@ echo
 
 set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
 set "TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
+set "OPENSSL_ROOT_DIR=%BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%"
+
+
 echo MY_BUILD_DIR is: %MY_BUILD_DIR%
 echo TOOLCHAIN_FILE is: %TOOLCHAIN_FILE%
 echo Building qtstuff in %MY_BUILD_DIR%
+echo qtstuff build OPENSSL_ROOT_DIR is %OPENSSL_ROOT_DIR%
 
 rmdir /S /Q "%MY_BUILD_DIR%"
 mkdir "%MY_BUILD_DIR%"
@@ -94,14 +98,14 @@ vcpkg list
 set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin;%MY_BUILD_DIR%\bin;%PATH%"
 
 echo PATH is: %PATH%
-echo Listing: %MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf
-dir "%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf"
+-DOPENSSL_ROOT_DIR
 
 echo "Calling cmake for qtstuff"
 cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
     -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN_FILE%" ^
     -DVCPKG_TARGET_TRIPLET="%VCPKG_DEFAULT_TRIPLET%" ^
     -DProtobuf_PROTOC_EXECUTABLE="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf\protoc.exe" ^
+    -DOPENSSL_ROOT_DIR=%OPENSSL_ROOT_DIR%= ^
     -DENABLE_GRPC=ON ^
     -DCMAKE_PREFIX_PATH="%QT_TARGET_DIR%" ^
     -G "Ninja" ^

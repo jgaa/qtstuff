@@ -38,6 +38,8 @@ echo VCPKG_ROOT is: %VCPKG_ROOT%
 
 set QT_BUILD_DIR=%BUILD_DIR%\qt
 echo Qt build dir is: %QT_BUILD_DIR%
+set "OPENSSL_ROOT_DIR=%QT_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%"
+echo qt build OPENSSL_ROOT_DIR is: %OPENSSL_ROOT_DIR%
 
 echo %PATH% | find /I "%VCPKG_ROOT%" >nul
 if errorlevel 1 (
@@ -113,6 +115,7 @@ call configure.bat ^
   -- ^
   -DFEATURE_system_zlib=OFF ^
   -DFEATURE_system_jpeg=OFF ^
+  -DOPENSSL_ROOT_DIR=%OPENSSL_ROOT_DIR%= ^
   -DFEATURE_system_doubleconversion=OFF
 if errorlevel 1 (
     echo configure Qt failed
