@@ -105,7 +105,9 @@ cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
     -DVCPKG_TARGET_TRIPLET="%VCPKG_DEFAULT_TRIPLET%" ^
     -DProtobuf_PROTOC_EXECUTABLE="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf\protoc.exe" ^
     -DENABLE_GRPC=ON ^
-    -DCMAKE_PREFIX_PATH="%QT_TARGET_DIR%" ^
+    -DCMAKE_PREFIX_PATH="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%;%QT_TARGET_DIR%" ^
+    -DCMAKE_POLICY_DEFAULT_CMP0091=NEW ^
+    -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
     -G "Ninja" ^
     -DCMAKE_BUILD_TYPE=Release
 if errorlevel 1 (
