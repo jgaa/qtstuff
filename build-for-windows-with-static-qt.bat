@@ -1,7 +1,5 @@
 @echo off
 
-cd C:\Users\jgaa\source\repos\qtstuff
-
 REM Check for directory "qtclient"
 if not exist "qtclient\" (
     echo Error: This script must be run from the project's root directory containing the 'qtclient' folder.
