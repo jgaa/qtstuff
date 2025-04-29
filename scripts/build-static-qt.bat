@@ -38,7 +38,7 @@ echo VCPKG_ROOT is: %VCPKG_ROOT%
 
 set QT_BUILD_DIR=%BUILD_DIR%\qt
 echo Qt build dir is: %QT_BUILD_DIR%
-set "OPENSSL_ROOT_DIR=%QT_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%"
+set "OPENSSL_ROOT_DIR=%QT_BUILD_DIR%\vcpkg_installed\x64-windows-release"
 echo qt build OPENSSL_ROOT_DIR is: %OPENSSL_ROOT_DIR%
 
 echo %PATH% | find /I "%VCPKG_ROOT%" >nul
@@ -111,6 +111,7 @@ call configure.bat ^
   -skip qthttpserver ^
   -skip qtdoc ^
   -vcpkg ^
+  -openssl-linked ^
   -nomake examples -nomake tests ^
   -- ^
   -DFEATURE_system_jpeg=OFF ^

@@ -31,6 +31,11 @@ echo QT_TARGET_DIR is: %QT_TARGET_DIR%
 echo VCPKG_ROOT is: %VCPKG_ROOT%
 echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
 
+set VCPKG_TRIPLET=%VCPKG_DEFAULT_TRIPLET%
+set CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
+echo CMAKE_TOOLCHAIN_FILE is: %CMAKE_TOOLCHAIN_FILE%
+echo VCPKG_TRIPLET is: %VCPKG_TRIPLET%
+
 echo "Cleaning PATH"
 call clean-path.bat
 set PATH=%CLEANED_PATH%
@@ -52,14 +57,11 @@ echo Building qtstuff using statically linked Qt
 echo
 
 set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
-set "TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake"
-set "OPENSSL_ROOT_DIR=%BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%"
-
+set "OPENSSL_ROOT_DIR=%BUILD_DIR%\vcpkg_installed\x64-windows-release"
+echo qtstuff build OPENSSL_ROOT_DIR is %OPENSSL_ROOT_DIR%
 
 echo MY_BUILD_DIR is: %MY_BUILD_DIR%
-echo TOOLCHAIN_FILE is: %TOOLCHAIN_FILE%
 echo Building qtstuff in %MY_BUILD_DIR%
-echo qtstuff build OPENSSL_ROOT_DIR is %OPENSSL_ROOT_DIR%
 
 rmdir /S /Q "%MY_BUILD_DIR%"
 mkdir "%MY_BUILD_DIR%"
