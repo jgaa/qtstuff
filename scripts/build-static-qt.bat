@@ -29,6 +29,11 @@ if not defined VCPKG_DEFAULT_TRIPLET (
     set "VCPKG_DEFAULT_TRIPLET=x64-windows-release"
 )
 
+if not defined VCPKG_ACTUAL_TRIPLET (
+    set "VCPKG_ACTUAL_TRIPLET=x64-windows"
+)
+
+
 echo From build-static-qt.bat
 echo VCPKG_ROOT is: %VCPKG_ROOT%
 echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
@@ -38,7 +43,7 @@ echo VCPKG_ROOT is: %VCPKG_ROOT%
 
 set QT_BUILD_DIR=%BUILD_DIR%\qt
 echo Qt build dir is: %QT_BUILD_DIR%
-set "OPENSSL_ROOT_DIR=%QT_BUILD_DIR%\vcpkg_installed\x64-windows-release"
+set "OPENSSL_ROOT_DIR=%QT_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%"
 echo qt build OPENSSL_ROOT_DIR is: %OPENSSL_ROOT_DIR%
 
 echo %PATH% | find /I "%VCPKG_ROOT%" >nul
@@ -76,9 +81,14 @@ echo "Ready to install vcpkg dependencies"
 dir
 vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
 
-set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\x64-windows\share\openssl\OpenSSLConfig.cmake
+set BAD_CMAKE_FILE=%QT_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%\share\openssl\OpenSSLConfig.cmake
 echo Patching OpenSSLConfig.cmake - removing invalid applink requirement: %BAD_CMAKE_FILE%
 powershell -Command "(Get-Content \"%BAD_CMAKE_FILE%\") -replace 'OpenSSL::applink', '' | Set-Content \"%BAD_CMAKE_FILE%\""
+
+echo ---------------------------
+echo dumping BAD_CMAKE_FILE: %BAD_CMAKE_FILE%
+type "%BAD_CMAKE_FILE%"
+echo ---------------------------
 
 call init-repository --module-subset=default,-qtwebengine,-qtmultimedia
 if errorlevel 1 (
@@ -99,22 +109,23 @@ call configure.bat ^
   -sql-sqlite ^
   -feature-png ^
   -feature-jpeg ^
+  -openssl-linked ^
   -skip qtwebengine ^
   -skip qtmultimedia ^
+  -skip qtspeech ^
   -skip qtsensors ^
   -skip qtconnectivity ^
   -skip qtnetworkauth ^
-  -skip qtspeech ^
   -skip qt5compat ^
   -skip qtquick3dphysics ^
   -skip qtremoteobjects ^
   -skip qthttpserver ^
   -skip qtdoc ^
   -vcpkg ^
-  -openssl-linked ^
   -nomake examples -nomake tests ^
   -- ^
   -DFEATURE_system_jpeg=OFF ^
+  -DFEATURE_system_zlib=OFF ^
   -DFEATURE_system_doubleconversion=OFF
 if errorlevel 1 (
     echo configure Qt failed

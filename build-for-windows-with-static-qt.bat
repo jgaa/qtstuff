@@ -1,4 +1,6 @@
 @echo off
+REM Change to script directory
+cd /d "%~dp0"
 
 REM Check for directory "qtclient"
 if not exist "qtclient\" (
@@ -21,7 +23,11 @@ if not defined VCPKG_ROOT (
 )
 
 if not defined VCPKG_DEFAULT_TRIPLET (
-    set "VCPKG_DEFAULT_TRIPLET=x64-windows-release"
+    set "VCPKG_DEFAULT_TRIPLET=x64-windows"
+)
+
+if not defined VCPKG_ACTUAL_TRIPLET (
+    set "VCPKG_ACTUAL_TRIPLET=x64-windows"
 )
 
 echo Preparing to build qtstuff...
@@ -38,7 +44,7 @@ echo VCPKG_TRIPLET is: %VCPKG_TRIPLET%
 
 echo "Cleaning PATH"
 call clean-path.bat
-set PATH=%CLEANED_PATH%
+set PATH=%VCPKG_ROOT%;%CLEANED_PATH%
 echo Path is now: %PATH%
 
 echo Static Qt target dir is: %QT_TARGET_DIR%
@@ -57,7 +63,7 @@ echo Building qtstuff using statically linked Qt
 echo
 
 set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
-set "OPENSSL_ROOT_DIR=%BUILD_DIR%\vcpkg_installed\x64-windows-release"
+set "OPENSSL_ROOT_DIR=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%"
 echo qtstuff build OPENSSL_ROOT_DIR is %OPENSSL_ROOT_DIR%
 
 echo MY_BUILD_DIR is: %MY_BUILD_DIR%
@@ -99,6 +105,7 @@ set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%M
 
 echo PATH is: %PATH%
 
+
 echo "Calling cmake for qtstuff"
 cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
     -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN_FILE%" ^
@@ -106,8 +113,6 @@ cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
     -DProtobuf_PROTOC_EXECUTABLE="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf\protoc.exe" ^
     -DENABLE_GRPC=ON ^
     -DCMAKE_PREFIX_PATH="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%;%QT_TARGET_DIR%" ^
-    -DCMAKE_POLICY_DEFAULT_CMP0091=NEW ^
-    -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
     -DOPENSSL_ROOT_DIR="%OPENSSL_ROOT_DIR%" ^
     -G "Ninja" ^
     -DCMAKE_BUILD_TYPE=Release
@@ -121,6 +126,9 @@ if errorlevel 1 (
     echo Failed to build the project
     exit /b
 )
+
+echo Copying dll's
+copy %MY_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%\bin\*.dll %MY_BUILD_DIR%\bin\
 
 cpack -G NSIS
 
