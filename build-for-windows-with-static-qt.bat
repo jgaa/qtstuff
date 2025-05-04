@@ -23,7 +23,7 @@ if not defined VCPKG_ROOT (
 )
 
 if not defined VCPKG_DEFAULT_TRIPLET (
-    set "VCPKG_DEFAULT_TRIPLET=x64-windows"
+    set "VCPKG_DEFAULT_TRIPLET=x64-windows-release"
 )
 
 if not defined VCPKG_ACTUAL_TRIPLET (
@@ -128,7 +128,8 @@ if errorlevel 1 (
 )
 
 echo Copying dll's
-copy %MY_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%\bin\*.dll %MY_BUILD_DIR%\bin\
+copy /Y %MY_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%\bin\*.dll %MY_BUILD_DIR%\bin\
+copy /Y %MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin\*.dll %MY_BUILD_DIR%\bin\
 
 cpack -G NSIS
 
