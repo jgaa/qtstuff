@@ -1,4 +1,6 @@
 @echo off
+REM Change to script directory
+cd /d "%~dp0"
 
 REM Check for directory "qtclient"
 if not exist "qtclient\" (
@@ -21,8 +23,29 @@ if not defined VCPKG_ROOT (
 )
 
 if not defined VCPKG_DEFAULT_TRIPLET (
-    set "VCPKG_DEFAULT_TRIPLET=x64-windows-release"
+    set "VCPKG_DEFAULT_TRIPLET=x64-windows"
 )
+
+if not defined VCPKG_ACTUAL_TRIPLET (
+    set "VCPKG_ACTUAL_TRIPLET=x64-windows"
+)
+
+echo Preparing to build qtstuff...
+echo SOURCE_DIR is: %SOURCE_DIR%    
+echo BUILD_DIR is: %BUILD_DIR%
+echo QT_TARGET_DIR is: %QT_TARGET_DIR%
+echo VCPKG_ROOT is: %VCPKG_ROOT%
+echo VCPKG_DEFAULT_TRIPLET is: %VCPKG_DEFAULT_TRIPLET%
+
+set VCPKG_TRIPLET=%VCPKG_DEFAULT_TRIPLET%
+set CMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
+echo CMAKE_TOOLCHAIN_FILE is: %CMAKE_TOOLCHAIN_FILE%
+echo VCPKG_TRIPLET is: %VCPKG_TRIPLET%
+
+echo "Cleaning PATH"
+call clean-path.bat
+set PATH=%VCPKG_ROOT%;%CLEANED_PATH%
+echo Path is now: %PATH%
 
 echo Static Qt target dir is: %QT_TARGET_DIR%
 if not exist "%QT_TARGET_DIR%\" (
@@ -39,17 +62,12 @@ echo -------------------------------------------
 echo Building qtstuff using statically linked Qt
 echo
 
-copy /Y "%SOURCE_DIR%\build-configs\vcpkg-noqt.json" vcpkg.json
-if errorlevel 1 (
-    echo Failed to copy vcpkg.json
-    exit /b
-)
-
-
 set "MY_BUILD_DIR=%BUILD_DIR%\qtstuff"
-set TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake
+set "OPENSSL_ROOT_DIR=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%"
+echo qtstuff build OPENSSL_ROOT_DIR is %OPENSSL_ROOT_DIR%
 
-echo "Path is: %PATH%"
+echo MY_BUILD_DIR is: %MY_BUILD_DIR%
+echo Building qtstuff in %MY_BUILD_DIR%
 
 rmdir /S /Q "%MY_BUILD_DIR%"
 mkdir "%MY_BUILD_DIR%"
@@ -58,29 +76,66 @@ if errorlevel 1 (
     exit /b
 )
 
+pushd "%MY_BUILD_DIR%"
+if errorlevel 1 (
+    echo Failed to pushd into %MY_BUILD_DIR%
+    exit /b
+)
+
+echo %PATH% | find /I "%VCPKG_ROOT%" >nul
+if errorlevel 1 (
+    set "PATH=%VCPKG_ROOT%;%PATH%"
+)
+echo Path is: %PATH%
+
+echo copy /Y %SOURCE_DIR%\build-configs\vcpkg-noqt.json %MY_BUILD_DIR%\vcpkg.json
+copy /Y "%SOURCE_DIR%\build-configs\vcpkg-noqt.json" vcpkg.json
+if errorlevel 1 (
+    echo Failed to copy %SOURCE_DIR%\build-configs\vcpkg-noqt.json to vcpkg.json
+    exit /b
+)
+
+echo Running vcpkg install for qtstuff
+vcpkg install --triplet "%VCPKG_DEFAULT_TRIPLET%"
+
+echo Listing vcpkg packages
+vcpkg list
+
+set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin;%MY_BUILD_DIR%\bin;%PATH%"
+
+echo PATH is: %PATH%
+
+
+echo "Calling cmake for qtstuff"
 cmake -S "%SOURCE_DIR%" -B "%MY_BUILD_DIR%" ^
     -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN_FILE%" ^
-    -DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET% ^
+    -DVCPKG_TARGET_TRIPLET="%VCPKG_DEFAULT_TRIPLET%" ^
+    -DProtobuf_PROTOC_EXECUTABLE="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\protobuf\protoc.exe" ^
     -DENABLE_GRPC=ON ^
-    -DCMAKE_PREFIX_PATH="%QT_TARGET_DIR%" ^
-    -DQT_QMAKE_EXECUTABLE="%QT_TARGET_DIR%\bin\qmake" ^
+    -DCMAKE_PREFIX_PATH="%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%;%QT_TARGET_DIR%" ^
+    -DOPENSSL_ROOT_DIR="%OPENSSL_ROOT_DIR%" ^
     -G "Ninja" ^
     -DCMAKE_BUILD_TYPE=Release
 if errorlevel 1 (
-    echo Failed to create run cmake
+    echo Failed to run cmake
     exit /b
 )
-
-
-cd "%MY_BUILD_DIR%" || exit /b
-set "PATH=%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\tools\brotli;%MY_BUILD_DIR%\vcpkg_installed\%VCPKG_DEFAULT_TRIPLET%\bin;%MY_BUILD_DIR%\bin;%PATH%"
 
 cmake --build . --config Release
 if errorlevel 1 (
-    echo "Failed to build the project"
+    echo Failed to build the project
     exit /b
 )
 
-rem cmake --install . --config Release
+echo Copying dll's
+copy %MY_BUILD_DIR%\vcpkg_installed\%VCPKG_ACTUAL_TRIPLET%\bin\*.dll %MY_BUILD_DIR%\bin\
+
 cpack -G NSIS
 
+copy /Y "%MY_BUILD_DIR%\*.exe" "%BUILD_DIR%\"
+if errorlevel 1 (
+    echo Failed to copy the executable installer
+    exit /b
+)
+
+popd

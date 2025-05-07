@@ -4,8 +4,11 @@
     "boost-program-options",
     "grpc",
     "protobuf",
-    "brotli"
+    "brotli",
+    "zlib",
+    "libpng",
+    "openssl"
   ],
 
-  "builtin-baseline": "9b75e789ece3f942159b8500584e35aafe3979ff"
+  "builtin-baseline": "760bfd0c8d7c89ec640aec4df89418b7c2745605"
 }

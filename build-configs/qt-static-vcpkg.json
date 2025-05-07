@@ -17,7 +17,9 @@
     "grpc",
     "protobuf",
     "pkgconf",
-    "brotli"
+    "brotli",
+    "zlib",
+    "libpng"
   ],
-  "builtin-baseline": "d5182f703b51d7b258f83f94d936ac03488dcdbe"
+  "builtin-baseline": "760bfd0c8d7c89ec640aec4df89418b7c2745605"
 }

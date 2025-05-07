@@ -3,6 +3,17 @@ project(qtstuff
         VERSION ${APP_VERSION}
         LANGUAGES CXX)
 
+message(STATUS "CMake system processor: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "CMake host system name: ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "Pointer size (CMAKE_SIZEOF_VOID_P): ${CMAKE_SIZEOF_VOID_P}")
+message(STATUS "CMake build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "CMake generator: ${CMAKE_GENERATOR}")        
+message(STATUS "CMake generator platform: ${CMAKE_GENERATOR_PLATFORM}")    
+message(STATUS "CMake generator toolset: ${CMAKE_GENERATOR_TOOLSET}")
+message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+message(STATUS "VCPKG_TARGET_TRIPLET: ${VCPKG_TARGET_TRIPLET}")
+
 if (ENABLE_GRPC)
     set(GRPC_PACKAGES Core Protobuf ProtobufQuick Grpc ProtobufQtCoreTypes)
     set(GRPC_TARGETS
@@ -10,7 +21,7 @@ if (ENABLE_GRPC)
         Qt6::Core
 	gRPC::grpc++
     )
-    find_package(grpc CONFIG REQUIRED)
+    find_package(gRPC CONFIG REQUIRED)
     add_compile_definitions(ENABLE_GRPC)
 endif()
 
@@ -25,11 +36,9 @@ qt_policy(SET QTP0003 NEW)
 qt_policy(SET QTP0004 NEW)
 
 if (ENABLE_GRPC)
-    add_library(grpc_stuff STATIC)
-
     qt_add_protobuf(grpc_stuff_pb
-#        QML
-#        QML_URI QtGrpcStuff.Proto
+       QML
+       QML_URI QtGrpcStuff.Proto
         PROTO_FILES
             ${protofile}
         PROTO_INCLUDES
