@@ -1,0 +1,14 @@
+name: Disk Usage Check
+
+# Trigger manually; you can also add "push" or other events here
+on:
+  workflow_dispatch:
+
+jobs:
+  show-disk-usage:
+    name: Show Disk Usage on macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Display disk free space
+        run: df -h
