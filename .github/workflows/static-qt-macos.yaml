@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
             brew update
-            brew install automake autoconf libtool pkg-config
+            brew install automake autoconf libtool pkg-config autoconf-archive ninja
 
       - name: Cache vcpkg
         uses: actions/cache@v3
