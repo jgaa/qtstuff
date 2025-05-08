@@ -28,10 +28,10 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-          name: Install dependencies
-          run: |
+      - name: Install dependencies
+        run: |
             brew update
-            brew install automake autoconf libtool
+            brew install automake autoconf libtool pkg-config
 
       - name: Cache vcpkg
         uses: actions/cache@v3
