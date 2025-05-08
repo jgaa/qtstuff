@@ -9,7 +9,7 @@ env:
   SRC_DIR:   ${{ github.workspace }}
   BUILD_DIR: ${{ github.workspace }}/build
   VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-  VCPKG_TRIPLET: arm64-osx
+  VCPKG_TRIPLET: arm64-osx-release
   VCPKG_INSTALL_OPTIONS: "--clean-after-build"
   # ensure CMake will auto-invoke vcpkg manifest mode
   VCPKG_MANIFEST_MODE: "ON"
@@ -53,6 +53,11 @@ jobs:
       - name: Configure CMake (and install deps)
         run: |
           mkdir -p $BUILD_DIR && cd $BUILD_DIR
+          cp ${SRC_DIR}/vcpkg.json .
+          echo installing vcpkg packages
+          vcpkg install $VCPKG_INSTALL_OPTIONS --triplet $VCPKG_TRIPLET
+          echo installing vcpkg packages done
+          echo configuring cmake
           cmake -G Ninja \
             -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake \
             -DVCPKG_TARGET_TRIPLET=$VCPKG_TRIPLET \
