@@ -67,5 +67,6 @@ jobs:
 
       - name: Build & Package
         run: |
+          cd $BUILD_DIR
           cmake --build . --config Release --target package
           cpack -G DragNDrop
